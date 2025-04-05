@@ -12,7 +12,10 @@ import { FavoritesProvider } from '../contexts/FavoritesContext';
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [language, setLanguage] = useState<'ru' | 'ua'>('ru');
+  const [language, setLanguage] = useState<'ru' | 'ua'>(() => {
+    const savedLanguage = localStorage.getItem('preferredLanguage');
+    return (savedLanguage === 'ru' || savedLanguage === 'ua') ? savedLanguage : 'ru';
+  });
   const [restartTypewriter, setRestartTypewriter] = useState(0);
 
   useEffect(() => {
@@ -25,6 +28,7 @@ const Index = () => {
 
   const handleLanguageChange = (newLanguage: 'ru' | 'ua') => {
     setLanguage(newLanguage);
+    localStorage.setItem('preferredLanguage', newLanguage);
     setRestartTypewriter(prev => prev + 1);
   };
 

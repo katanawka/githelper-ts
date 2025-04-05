@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 13%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 15%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 13%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 24 95% 53%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 215.4 16.3% 66.9%;
+
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 24 95% 53%;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-[#0e0e12] text-foreground font-sans overflow-x-hidden;
+  }
+  
+  a {
+    @apply text-gitOrange hover:text-orange-400 transition-colors;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #161621;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #F97316;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #e86509;
+  }
+}
+
+.typing-animation {
+  display: inline-block;
+  white-space: normal;
+  overflow: hidden;
+  text-align: center;
+  max-width: 100%;
+  line-height: 1.6;
+}
+
+.typing-animation.typing-complete {
+  animation: none;
+}
+
+.code-block {
+  background-color: #161621;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin: 1rem 0;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.95rem;
+  overflow-x: auto;
+  border: 1px solid #252535;
+}
+
+.code-block pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.code-comment {
+  color: #6a737d;
+}
+
+.command-section h3 {
+  border-bottom: 1px solid #252535;
+  padding-bottom: 0.75rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.command-title {
+  color: #F97316;
+  font-weight: bold;
+}
+
+.command-description {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@layer utilities {
+  .no-scale-hover:hover {
+    transform: none;
+  }
+}

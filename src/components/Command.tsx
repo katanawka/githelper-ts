@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Copy, Check, Star } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
 import { translations } from '../utils/translations';
@@ -13,9 +13,31 @@ interface CommandProps {
 
 const Command: React.FC<CommandProps> = ({ command, description, language }) => {
   const [copied, setCopied] = useState(false);
+  const [isInSearchDialog, setIsInSearchDialog] = useState(false);
+  const commandRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const t = translations[language];
   const { addFavorite, removeFavorite, isFavorite } = useFavorites();
+
+  // Detect if the command is inside the search dialog
+  useEffect(() => {
+    if (commandRef.current) {
+      const checkIfInDialog = () => {
+        let element: HTMLElement | null = commandRef.current;
+        while (element) {
+          if (element.classList && element.classList.contains('DialogContent')) {
+            setIsInSearchDialog(true);
+            return;
+          }
+          element = element.parentElement;
+        }
+        setIsInSearchDialog(false);
+      };
+      
+      // Check on mount
+      checkIfInDialog();
+    }
+  }, []);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(command).then(() => {
@@ -82,9 +104,20 @@ const Command: React.FC<CommandProps> = ({ command, description, language }) => 
   };
 
   return (
-    <div className="mb-2"> {/* Removed transform and hover scale */}
+    <div 
+      ref={commandRef}
+      className={`${
+        isInSearchDialog 
+          ? "mb-2" // Reduced margin for search dialog
+          : "mb-4 transform transition-transform duration-300 hover:scale-105 will-change-transform"
+      }`}
+    >
       <div 
-        className="code-block cursor-pointer group relative overflow-hidden"
+        className={`code-block cursor-pointer group relative overflow-hidden ${
+          isInSearchDialog 
+            ? 'py-2 px-3' // Smaller padding for search dialog items
+            : !isInSearchDialog ? 'hover:bg-[rgba(249,115,22,0.1)] hover:border-[rgba(249,115,22,0.3)]' : ''
+        }`}
         onClick={(e) => {
           if (document.querySelector('.DialogContent')?.contains(e.currentTarget)) {
             scrollToCommand();
@@ -93,7 +126,7 @@ const Command: React.FC<CommandProps> = ({ command, description, language }) => 
           }
         }}
       >
-        <pre className="whitespace-pre-wrap break-words">
+        <pre className={`whitespace-pre-wrap break-words ${isInSearchDialog ? 'text-sm' : ''}`}>
           <code>$ <span className="text-gitOrange">{command}</span> <span className="code-comment">// {description}</span></code>
         </pre>
         <div className="absolute top-3 right-3 flex items-center gap-2">
@@ -102,12 +135,12 @@ const Command: React.FC<CommandProps> = ({ command, description, language }) => 
             onClick={toggleFavorite}
             aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
           >
-            <Star className="h-4 w-4" fill={favorite ? "currentColor" : "none"} />
+            <Star className={`${isInSearchDialog ? 'h-3 w-3' : 'h-4 w-4'}`} fill={favorite ? "currentColor" : "none"} />
           </button>
           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             {copied ? 
-              <Check className="h-4 w-4 text-green-500" /> : 
-              <Copy className="h-4 w-4 text-gitOrange hover:text-white" />
+              <Check className={`${isInSearchDialog ? 'h-3 w-3' : 'h-4 w-4'} text-green-500`} /> : 
+              <Copy className={`${isInSearchDialog ? 'h-3 w-3' : 'h-4 w-4'} text-gitOrange hover:text-white`} />
             }
           </div>
         </div>

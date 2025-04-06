@@ -71,7 +71,7 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-[#161621] border border-[#252535] text-white max-w-3xl max-h-[80vh] overflow-hidden flex flex-col">
+      <DialogContent className="bg-[#161621] border border-[#252535] text-white max-w-4xl w-[90vw] max-h-[80vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-gitOrange text-xl flex items-center gap-2">
             <Search size={20} />
@@ -99,9 +99,9 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
           )}
         </div>
         
-        <div className="overflow-y-auto custom-scrollbar flex-1">
+        <div className="overflow-y-auto custom-scrollbar flex-1 px-2">
           {searchResults.length > 0 ? (
-            <div className="space-y-2">
+            <div className="space-y-1 py-1">
               {searchResults.map((cmd, index) => (
                 <Command 
                   key={index} 

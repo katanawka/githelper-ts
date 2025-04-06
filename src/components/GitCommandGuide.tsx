@@ -1,6 +1,7 @@
 
 import React from 'react';
 import GitHubSignupGuide from './GitHubSignupGuide';
+import GitInstallGuide from './GitInstallGuide';
 import StartCommands from './CommandGroups/StartCommands';
 import BasicCommands from './CommandGroups/BasicCommands';
 import BranchCommands from './CommandGroups/BranchCommands';
@@ -18,6 +19,7 @@ const GitCommandGuide: React.FC<GitCommandGuideProps> = ({ language }) => {
   return (
     <div className="max-w-3xl mx-auto py-8">
       <GitHubSignupGuide language={language} />
+      <GitInstallGuide language={language} />
       <StartCommands language={language} />
       <BasicCommands language={language} />
       <BranchCommands language={language} />

@@ -45,7 +45,7 @@ const SidebarNav: React.FC<SidebarNavProps> = ({ language }) => {
         document.getElementById(section.id)
       ).filter(Boolean);
       
-      const currentPosition = window.scrollY + 200;
+      const currentPosition = window.scrollY + 200; // Adding offset to improve detection
       
       for (let i = sectionElements.length - 1; i >= 0; i--) {
         const element = sectionElements[i];

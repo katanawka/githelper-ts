@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -91,6 +92,7 @@
   font-size: 0.95rem;
   overflow-x: auto;
   border: 1px solid #252535;
+  position: relative;
 }
 
 .code-block pre {
@@ -129,4 +131,49 @@
   .no-scale-hover:hover {
     transform: none;
   }
+  
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #F97316 #161621;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #161621;
+    border-radius: 4px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #F97316;
+    border-radius: 4px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #e86509;
+  }
+}
+
+/* Toast styling */
+.Toastify__toast {
+  background-color: #161621 !important;
+  color: white !important;
+  border: 1px solid #252535 !important;
+}
+
+.Toastify__toast-body {
+  color: white !important;
+}
+
+.Toastify__progress-bar {
+  background-color: #F97316 !important;
+}
+
+/* Update Command component hover */
+.code-block:hover {
+  background-color: rgba(249, 115, 22, 0.1);
+  border-color: rgba(249, 115, 22, 0.3);
+  transition: all 0.3s ease;
 }

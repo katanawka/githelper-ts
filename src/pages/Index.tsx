@@ -7,8 +7,15 @@ import GitLogo from '../components/GitLogo';
 import LanguageToggle from '../components/LanguageToggle';
 import SidebarNav from '../components/SidebarNav';
 import { translations } from '../utils/translations';
-import { Github, Send } from 'lucide-react';
+import { Github, Send, Search } from 'lucide-react';
 import { FavoritesProvider } from '../contexts/FavoritesContext';
+import SearchDialog from '../components/SearchDialog';
+import { Button } from '@/components/ui/button';
+
+interface GitCommand {
+  command: string;
+  description: string;
+}
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -17,6 +24,8 @@ const Index = () => {
     return (savedLanguage === 'ru' || savedLanguage === 'ua') ? savedLanguage : 'ru';
   });
   const [restartTypewriter, setRestartTypewriter] = useState(0);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [allCommands, setAllCommands] = useState<GitCommand[]>([]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -25,6 +34,42 @@ const Index = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (searchOpen && allCommands.length === 0) {
+      collectAllCommands();
+    }
+  }, [searchOpen]);
+
+  useEffect(() => {
+    // Re-collect commands when language changes
+    if (language) {
+      collectAllCommands();
+    }
+  }, [language]);
+
+  const collectAllCommands = () => {
+    const commandBlocks = document.querySelectorAll('.code-block');
+    const commandsData: GitCommand[] = [];
+    
+    commandBlocks.forEach(block => {
+      const codeElement = block.querySelector('code');
+      if (codeElement) {
+        const text = codeElement.textContent || '';
+        const commandMatch = text.match(/\$ (.*?) \/\//);
+        const descriptionMatch = text.match(/\/\/ (.*)/);
+        
+        if (commandMatch && descriptionMatch) {
+          commandsData.push({
+            command: commandMatch[1].trim(),
+            description: descriptionMatch[1].trim()
+          });
+        }
+      }
+    });
+    
+    setAllCommands(commandsData);
+  };
 
   const handleLanguageChange = (newLanguage: 'ru' | 'ua') => {
     setLanguage(newLanguage);
@@ -40,7 +85,15 @@ const Index = () => {
     <FavoritesProvider language={language}>
       <div className="min-h-screen bg-[#0e0e12] text-white">
         <header className="pt-20 pb-12 px-4 text-center relative">
-          <div className="absolute top-4 right-4">
+          <div className="absolute top-4 right-4 flex items-center gap-2">
+            <Button
+              onClick={() => setSearchOpen(true)}
+              className="bg-[#161621] hover:bg-[#252535] text-gitOrange transition-colors duration-300 rounded-md flex items-center px-3 py-2"
+              variant="ghost"
+              aria-label={language === 'ru' ? 'Поиск команд' : 'Пошук команд'}
+            >
+              <Search size={16} />
+            </Button>
             <LanguageToggle 
               currentLanguage={language} 
               onLanguageChange={handleLanguageChange} 
@@ -96,6 +149,13 @@ const Index = () => {
             </a>
           </div>
         </footer>
+
+        <SearchDialog
+          open={searchOpen}
+          onOpenChange={setSearchOpen}
+          language={language}
+          commands={allCommands}
+        />
       </div>
     </FavoritesProvider>
   );
